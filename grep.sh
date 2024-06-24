@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# This script uses ripgrep, fzf and bat to interactively find, select, and preview notes
+# the script returns a string of the format "FILE\tLINE_NUMBER", where FILE is the path
+# to the selected note, and LINE_NUMBER is the line number of the match
+
+# This script takes takes the notes directory as a first argument
+# and an initial search query as a second argument
+
+set -eu
+
+if (($# < 1)); then
+  exit
+fi
+
+notes_directory="$1"
+initial_query=${2:-''}
+
+FZF_INPUT_COMMAND=(rg
+  --column --line-number --no-heading
+  #--color=always
+  --type=md
+  #--fixed-strings
+  --smart-case
+  -- '{q}'
+  "'$notes_directory'")
+
+FZF_PREVIEW_COMMAND=(
+  bat
+  --color=always
+  --style="numbers"
+  --highlight-line '{2}'
+  '{1}'
+)
+
+fzf \
+  --ansi --disabled \
+  --info=inline \
+  --query "$initial_query" \
+  --bind "start:reload:${FZF_INPUT_COMMAND[*]}" \
+  --bind "change:reload:${FZF_INPUT_COMMAND[*]}" \
+  --delimiter : \
+  --preview "${FZF_PREVIEW_COMMAND[*]}" \
+  --preview-window 'bottom,80%,border-top,+{2}+3/3,~3' \
+  --bind "enter:become(printf '%s\t%d' {1} {2})" \
+  --prompt "[rip]grep> "
