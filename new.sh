@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# this script opens a new note with a temporary initial name, then prompts for
-# the final name of the note
-# Takes two positional arguments:
+# this interactive script opens a new note with a temporary initial name, then
+# prompts for the final name when the user saves and quit
+# It takes two positional arguments:
 # 1. the editor command
 # 2. the notes directory
 
@@ -27,6 +27,7 @@ $EDITOR "$editing_file" &&
     if [ -a "$final_path" ]; then
       continue
     else
+      mkdir -p "$(dirname "$final_path")"
       mv "$editing_file" "$final_path"
       break
     fi
