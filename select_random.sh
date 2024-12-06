@@ -3,7 +3,9 @@
 # this script selects a random note
 # this secript takes an argument for the notes directory
 
-# fail if no arguments are given
+set -eu
+
+# fail if no or too many arguments are given
 if (($# != 1)); then
   exit 1
 fi
@@ -17,8 +19,9 @@ FIND_COMMAND_ZERO_TERMINATED=(fd
   --glob '*.md'
   --print0)
 
+echo "$NOTES_DIRECTORY"
 declare -a search_results
 readarray -d '' search_results < <("${FIND_COMMAND_ZERO_TERMINATED[@]}")
 
-# is this really how one is supposed to index a random element in bash
+# is this really how one is supposed to index a random array element in bash
 printf "%s" "${search_results[$((RANDOM % "${#search_results[@]}"))]}"

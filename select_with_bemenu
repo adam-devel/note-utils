@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -eu
+
+declare NOTES_DIRECTORY
+if (($# != 1)); then
+  echo "expected exactly one argument, namely the notes directory"
+  echo "usage: $0 <notes_direcoty>"
+  exit 1
+fi
+
+FIND_COMMAND=(
+  fd
+  --type file
+  --and '.md$'
+  #--print0 # outputs a NUL separated list
+)
+
+BEMENU_FLAGS=(
+  --list 7
+  --ignorecase
+  --fixed-height
+  --no-exec
+)
+
+NOTES_DIRECTORY="$(realpath $1)" # to normalize the path
+cd "$NOTES_DIRECTORY" || exit 1
+
+result=$("${FIND_COMMAND[@]}" | sed 's|^'$NOTES_DIRECTORY/'||' | sed 's|.md$||' | bemenu "${BEMENU_FLAGS[@]}")
+[[ -z "$result" ]] && exit 1;
+printf '%s' "$NOTES_DIRECTORY/$result.md"

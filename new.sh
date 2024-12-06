@@ -14,7 +14,7 @@ NOTES_DIRECTORY=$2
 EDITOR=$1
 
 # choose a random name for the note
-editing_file="$NOTES_DIRECTORY/newnote${RANDOM}"
+editing_file="$NOTES_DIRECTORY/newnote${RANDOM}.md"
 
 # choose a new note name
 while true; do

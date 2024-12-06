@@ -1,15 +1,27 @@
 #!/usr/bin/env bash
 
-# This script uses ripgrep, fzf and bat to interactively find, select, and preview notes
-# the script returns a string of the format "FILE\tLINE_NUMBER", where FILE is the path
-# to the selected note, and LINE_NUMBER is the line number of the match
+# This script uses ripgrep, fzf and bat to interactively find, select, and
+# preview notes.
+# The script returns a string of the format "FILE\tLINE_NUMBER".
+# FILE is the path of the selected file (the note)
+# LINE_NUMBER is the line number for the matched string
 
 # This script takes takes the notes directory as a first argument
 # and an initial search query as a second argument
 
 set -eu
 
+print_usage_help() {
+  cat <<EOF
+Usage: grep <notes_directory> [search_pattern]
+Where: <notes_directory> is the directory where the notes are stored
+       and [search_pattern] is the optional initial search pattern
+EOF
+}
+
 if (($# < 1)); then
+  echo insuffictient number of arguments !
+  print_usage_help
   exit
 fi
 

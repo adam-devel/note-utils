@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# this script edits a note, it inserts the file name into the first line
+# after editing the file, it reads the first line and renames the file accordingly
+# It takes two arguments: 1. the editor command and 2. the note to be edited
+
+set -eu
+
+EDITOR=$1
+initial_path=$2
+filename="$(basename "$initial_path")"
+basename="${filename%.*}"
+
+
+while true; do
+  # insert the filename if it isn't already there
+  #first_line="$(head --lines=1 -- "$initial_path")"
+  #if [[ "$first_line" != "$basename" ]]; then
+  #fi
+
+  if [[ -f "$initial_path" ]]; then
+    ed -s +1 "$initial_path" <<< $'i\n'"$basename"$'\n.\nw'
+  fi
+
+  # edit the file and read the first line
+  $EDITOR "$initial_path"
+  edited_line="$(head --lines=1 -- "$initial_path")"
+  [[ -z "$edited_line" ]] && exit 1;
+  ed -s +1 "$initial_path" <<< $'d\nw'
+
+  if [[ "$basename" == "$edited_line" ]]; then
+    break
+  fi
+
+  if [[ "$filename" == *.* ]]; then
+    extension=".${filename##*.}"
+  else
+    extension=""
+  fi
+  chosen_path="$(dirname "$initial_path")/$edited_line${extension}"
+  if [[ -e "$chosen_path" ]]; then
+    { echo "i"
+      echo "=== Error Message starts here ==="
+      echo "The name '$edited_line' is already taken"
+      echo "Please delete this error message then:"
+      echo "- Save and quit to accept the original name"
+      echo "- or, choose another name"
+      echo "=== Error Message ends here ==="
+      echo
+      echo "."
+      echo "w"
+    } | ed -s +1 "$initial_path";
+    continue
+  fi
+  if mv "$initial_path" "$chosen_path"; then
+    break;
+  else
+    { echo "i"
+      echo "Error: rename operation failed"
+      echo "File name is reset to the initial name"
+      echo "Choose another name or keep the original"
+      echo "Make sure to remove this message once done"
+      echo "."
+      echo "w"
+    } | ed -s +1 "$initial_path";
+    continue
+  fi
+done

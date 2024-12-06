@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# This script resolves a link from one note to another.
+# Finding the target of a link is no more than finding the match of an exact
+# search by file name. If no matches are found, the script fails
+# The script takes a search query, a location to search within
+
+set -eu
+
+if (($# != 2)); then
+  echo "Usage: $0 <search query> <notes directory>"
+  echo "Example: $0 'Foundations of Mathematics' ~/notes"
+  exit 1
+fi
+
+SEARCH_QUERY="$1"
+NOTES_PATH="$(realpath "$2")"
+
+FIND_COMMAND=(
+  fd
+  --search-path "$NOTES_PATH"
+  --type file
+  --and "$SEARCH_QUERY.md"
+)
+
+search_result="$("${FIND_COMMAND[@]}" | head -1)"
+
+if [[ -z "$search_result" ]]; then
+  exit 1
+else
+  printf '%s' "$search_result"
+fi
