@@ -1,8 +1,6 @@
-A set of simple bash scripts for finding, opening, creating and managing notes.
+A set of simple bash scripts for finding, opening, creating and managing notes. the scripts are simple, they don't assume much. they are meant to easily be integrated into one's preferred envirenment.
 
-The scripts are simple and don't assume much, so they can easily be integrated into one's preferred envirenment.
-The following and the source code of the scripts are the documentation:
-
+The following —and the source code— are the documentation:
 - `resolve` takes two arguments, 1. a search query and 2. the location of the notes. it outputs the first note it finds that matches query.
 - `edit` takes two arguments, 1. a editor command and 2. a path to a file. it inserts the file name at the top of the file before opening it. afterwards it changes the name of the file if the first line changes. this allow the name of the note (playing the role of it's title) to be as easily cnageable as the rest of the text of the note
 - `select_with_*` are scripts that start with `select_with_`. they allow selecting a note using different menu programs, runners, launchers, etc.. they output a path to the selected note
