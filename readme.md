@@ -1,7 +1,7 @@
-A set of simple bash scripts for finding, opening and creating notes.
+A set of simple bash scripts for finding, opening, creating and managing notes.
 
-The scripts are simple and doesn't assume much, so they can easily be integrated
-into an editor or a window manager.
+The scripts are simple and don't assume much, so they can easily be integrated into one's preferred envirenment.
+The following and the source code of the scripts are the documentation:
 
 - `resolve` takes two arguments, 1. a search query and 2. the location of the notes. it outputs the first note it finds that matches query.
 - `edit` takes two arguments, 1. a editor command and 2. a path to a file. it inserts the file name at the top of the file before opening it. afterwards it changes the name of the file if the first line changes. this allow the name of the note (playing the role of it's title) to be as easily cnageable as the rest of the text of the note
