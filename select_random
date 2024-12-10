@@ -19,7 +19,6 @@ FIND_COMMAND_ZERO_TERMINATED=(fd
   --glob '*.md'
   --print0)
 
-echo "$NOTES_DIRECTORY"
 declare -a search_results
 readarray -d '' search_results < <("${FIND_COMMAND_ZERO_TERMINATED[@]}")
 

@@ -4,29 +4,41 @@
 # Finding the target of a link is no more than finding the match of an exact
 # search by file name. If no matches are found, the script fails
 # The script takes a search query, a location to search within
+# and optional flag
 
 set -eu
 
+flag_pass_is_present=0;
+
+if [[ "$1" == "-p" ]] || [[ "$1" == "--pass" ]];
+then
+  flag_pass_is_present=1;
+  shift;
+fi
+
 if (($# != 2)); then
-  echo "Usage: $0 <search query> <notes directory>"
+  echo "Usage: $0 [-p|--pass] <search query> <notes directory>"
   echo "Example: $0 'Foundations of Mathematics' ~/notes"
   exit 1
 fi
 
-SEARCH_QUERY="$1"
-NOTES_PATH="$(realpath "$2")"
+search_query="$1"
+notes_path="$(realpath "$2")"
 
 FIND_COMMAND=(
   fd
-  --search-path "$NOTES_PATH"
+  --search-path "$notes_path"
   --type file
-  --and "$SEARCH_QUERY.md"
+  --and "$search_query.md"
 )
 
 search_result="$("${FIND_COMMAND[@]}" | head -1)"
 
-if [[ -z "$search_result" ]]; then
-  exit 1
-else
+if [[ -n "$search_result" ]]; then
   printf '%s' "$search_result"
+elif [[ $flag_pass_is_present == 1 ]]; then
+  printf '%s/%s.md' "$notes_path" "$search_query"
+else
+  echo "No results found" >&2
+  exit 1
 fi
