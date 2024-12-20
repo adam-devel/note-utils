@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+
+# The following script selects a note using bemenu.
+# It takes a single argument: the note directory.
+# It then presents all *.md files within the directory.
+# It outputs the file path of the slected note.
+#
+# bemenue supports priting the search query regradless of whether it matches a
+# note or not. this allows editing nonexistent files, or in another sense
+# creating a note if it doesn't already exist (assuming the program consuming
+# the path supports opening files and creating them later, i.e. most editors)
+
+# error on missing variables and failed piplines
 set -eu
 
 declare NOTES_DIRECTORY
@@ -16,9 +28,16 @@ FIND_COMMAND=(
 )
 
 BEMENU_FLAGS=(
-  --list 7
+  --list 38
   --ignorecase
   --fixed-height
+  --prompt "Open Note"
+  -B2
+  --tf='#33ccff'
+  --hb='#44ddff'
+  --hf='#000000'
+  --bdr='#33ccff'
+  --bottom
   --no-exec
 )
 
