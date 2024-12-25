@@ -1,7 +1,7 @@
 A set of simple bash scripts for note taking. The scripts are simple, they don't assume much. They are meant to be easily integrated into one's preferred environment.
 
 The following —and the source code— are the documentation:
-- `resolve` Takes three positional arguments: 1) an optional flag (`-p` or `--pass`), 2) a search query and 3) the directory containing the notes; `resolve` outputs the absolute location of the note matching the query. if the `--pass` flag is present and no notes are found, the search query is appended to the notes' location then passed to stdout. the purpose of this is being able to resolve nonexitent files.
+- `resolve` Takes three positional arguments: 1) an optional flag (`-p` or `--pass`), 2) a search query and 3) the directory containing the notes; `resolve` outputs the absolute path of the note matching the query. if the `--pass` flag is present and no notes are found, the search query is appended to the notes' location then passed to stdout. the purpose of this is being able to resolve nonexitent files.
 - `edit`: Takes two arguments: 1) an editor command and 2) the file path for a note. It inserts the file name at the top of the note before opening it. If the line changes, it renames the file accordingly. This allows the note's name to serve as the title. this streamlines editing
 - `select_with_*` are scripts starting with `select_with_`. They allow selecting a note in various ways, using different menu programs, runners, launchers, etc.. The output is a file path to the selected note
 - `select_random` outputs a random note given a notes directory
